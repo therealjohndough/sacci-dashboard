@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "brand": "HOUSE OF SACCI",
+    "tagline": "Vendor Dashboard — by Project",
+    "source": "sacci-kb (wiki/ops, wiki/entities)",
+    "snapshot": "Jul 21, 2026"
+  },
+  "kpis": [
+    { "label": "Active Vendors", "value": "2", "sub": "Archibald, Cilicon" },
+    { "label": "Open Orders", "value": "3", "sub": "1 awaiting payment, 2 in production" },
+    { "label": "Committed Spend", "value": "~$60.6k", "sub": "Landed cost, open + in-production orders" },
+    { "label": "Quoted / Pending", "value": "8", "sub": "No PO placed yet" }
+  ],
+  "projects": [
+    {
+      "name": "Sacci Silencer — 2g Vape (formerly Stealth)",
+      "stage": { "label": "In Production", "type": "ok" },
+      "vendors": [
+        {
+          "name": "Cilicon",
+          "role": "hardware — Barry Zi",
+          "lines": [
+            { "label": "Hyfree 2g device, 15,000 units (5k air / 10k sea)", "amount": "$3.425/ea" },
+            { "label": "Shipping — air + sea", "amount": "$7,600" },
+            { "label": "Total landed", "amount": "~$56,525" },
+            { "label": "Deposit paid (30%, ~4/10)", "amount": "Balance on ship" }
+          ],
+          "nextAction": { "text": "Confirm receipt of air samples + confirm sea shipment ETA", "crit": false }
+        },
+        {
+          "name": "Archibald",
+          "role": "mylar bags — Julita Gump",
+          "lines": [
+            { "label": "20,000 bags — 5 SKUs (Maui, Laughing Gas, ZPK, Rosé Runtz, Sweet Mint)", "amount": "$0.10/ea" },
+            { "label": "EXW + DDP shipping", "amount": "$3,135" },
+            { "label": "Invoice issued Jul 1 · P/I 181413260701", "amount": "—" }
+          ],
+          "nextAction": { "label": "Blocking", "text": "Invoice account # doesn't match the 1g Quartz invoice — call Archibald to confirm correct account before wiring", "crit": true }
+        }
+      ]
+    },
+    {
+      "name": "1g Quartz Vape — Mylar Bags",
+      "stage": { "label": "Awaiting Payment", "type": "warn" },
+      "vendors": [
+        {
+          "name": "Archibald",
+          "role": "mylar bags — Julita Gump",
+          "lines": [
+            { "label": "11,000 bags — 5 SKUs (Maui, Laughing Gas, ZPK 3k ea; Rosé Runtz, Sweet Mint 1k ea)", "amount": "$0.089/ea" },
+            { "label": "EXW total", "amount": "$979" },
+            { "label": "Invoice issued Jul 1 · P/I 181413260701", "amount": "+ shipping TBD" }
+          ],
+          "nextAction": { "label": "Blocking", "text": "Send wire payment (mark P/I on receipt); confirm shipping method", "crit": true }
+        }
+      ]
+    },
+    {
+      "name": "Rosin Vape Pen .5g O2 — Trop Cherry + White Diamonds",
+      "stage": { "label": "Received / In Production", "type": "ok" },
+      "vendors": [
+        {
+          "name": "Archibald",
+          "role": "mylar bags — Julita Gump",
+          "lines": [
+            { "label": "5,000 bags — 2 designs", "amount": "$900" },
+            { "label": "Shipped ~May 19 — received", "amount": "Closed" }
+          ],
+          "nextAction": null
+        },
+        {
+          "name": "O2 Pen (hardware)",
+          "role": "vendor not yet filed in sacci-kb",
+          "lines": [
+            { "label": "4,000 units — Trop Cherry + White Diamonds", "amount": "Invoiced 3/22" }
+          ],
+          "nextAction": { "label": "Gap", "text": "No vendor entity page exists yet for the O2 pen hardware source — file one if this vendor relationship continues", "crit": false }
+        }
+      ]
+    }
+  ],
+  "pending": [
+    { "item": "DRAM jars (3.5g)", "vendor": "Archibald", "qty": "~50k/yr", "notes": "Patent issue on some styles — confirm shape" },
+    { "item": "DRAM jars (28g)", "vendor": "Archibald", "qty": "~20k+/yr", "notes": "Same patent constraint" },
+    { "item": "1lb promo jar", "vendor": "Archibald", "qty": "100", "notes": "One-time promo run" },
+    { "item": "10-pack cigarette box", "vendor": "Archibald", "qty": "15–20", "notes": "Promo/reference run, no CR mechanism needed" },
+    { "item": "Vinyl stickers 2\"×2\"", "vendor": "Archibald", "qty": "100,000", "notes": "Quoted, no order" },
+    { "item": "Die cut vinyl 5\"", "vendor": "Archibald", "qty": "100,000", "notes": "Quoted, no order" },
+    { "item": "Metallic paper labels 2\"×2\"", "vendor": "Archibald", "qty": "10,000", "notes": "Quoted, no order" },
+    { "item": "Watcha 1g all-in-one", "vendor": "Cilicon", "qty": "TBD", "notes": "$3.30 EXW · samples requested Apr 2026 · 1–2 qtrs out" }
+  ],
+  "contacts": [
+    {
+      "name": "Archibald",
+      "sub": "Shenzhen Archibald Technology Co., Ltd. — Packaging (mylar, jars, boxes, labels) · GMP Certified",
+      "rows": [
+        { "k": "Day-to-day", "v": "Julita Gump — quotes, dielines, invoicing" },
+        { "k": "Senior contact", "v": "Poppy Archibald — shipping/pricing decisions" },
+        { "k": "Lead time", "v": "~12d production + 3–5d air / 15d standard UPS" },
+        { "k": "Invoices to", "v": "marketing@houseofsacci.com (cc dan@)" },
+        { "k": "Ship-to", "v": "6820 Cedar Street, Akron NY 14001" }
+      ]
+    },
+    {
+      "name": "Cilicon",
+      "sub": "Hardware vendor — Sacci Silencer 2g vape device (Hyfree)",
+      "rows": [
+        { "k": "Sales", "v": "Barry Zi" },
+        { "k": "Invoicing", "v": "Bella Feng" },
+        { "k": "Legal entity (payment)", "v": "New York Seed Laboratory LLC" },
+        { "k": "Shipping default", "v": "Sea freight (20–30d); split shipments to hedge customs risk" },
+        { "k": "Ship-to", "v": "6820 Cedar Street, Akron NY 14001" }
+      ]
+    }
+  ],
+  "provenance": "Built from sacci-kb/wiki/entities/{archibald,cilicon}.md, wiki/ops/active-orders.md, and wiki/product-dev/pipeline.md — the two vendor entities currently filed in sacci-kb. A \"Seattle Design Lab\" vendor (Custom Acrylic Pedestal & 45° Signs) appeared in the older Jul 3 CommandCenter/HubSpot snapshot but has no sacci-kb entity page yet — flagged as unconfirmed, not included above. Banking/account details intentionally omitted from vendor cards (RESTRICTED per Hermes classification rules).",
+  "footerNote": "Rebuild once ops_projects / decision-register wiring is confirmed."
+}
