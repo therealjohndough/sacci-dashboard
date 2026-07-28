@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import data from './data/vendors.json'
 
 function useTheme() {
@@ -50,20 +50,23 @@ function Vendor({ vendor }) {
   )
 }
 
-function Project({ project }) {
+function Project({ project, collapsed, onToggle }) {
   return (
     <div className="project">
-      <div className="project-head">
+      <button className="project-head" onClick={onToggle} aria-expanded={!collapsed}>
         <span className="pname">{project.name}</span>
         <span className="pstage">
           <span className={`pill ${project.stage.type}`}>{project.stage.label}</span>
         </span>
-      </div>
-      <div className="vendors">
-        {project.vendors.map((v, i) => (
-          <Vendor vendor={v} key={i} />
-        ))}
-      </div>
+        <span className="project-toggle" aria-hidden="true">{collapsed ? '+' : '−'}</span>
+      </button>
+      {!collapsed && (
+        <div className="vendors">
+          {project.vendors.map((v, i) => (
+            <Vendor vendor={v} key={i} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -72,6 +75,45 @@ export default function App() {
   const [theme, cycleTheme] = useTheme()
   const { meta, kpis, projects, pending, contacts, provenance, footerNote } = data
   const themeLabel = theme === 'system' ? '◐ Auto' : theme === 'light' ? '☀ Light' : '☾ Dark'
+  const [query, setQuery] = useState('')
+  const [stage, setStage] = useState('all')
+  const [attentionOnly, setAttentionOnly] = useState(false)
+  const [collapsedProjects, setCollapsedProjects] = useState([])
+
+  const filteredProjects = useMemo(() => {
+    const term = query.trim().toLowerCase()
+    return projects.filter((project) => {
+      const matchesStage = stage === 'all' || project.stage.type === stage
+      const needsAttention = project.vendors.some((vendor) => vendor.nextAction)
+      const matchesAttention = !attentionOnly || needsAttention
+      const searchable = [
+        project.name,
+        project.stage.label,
+        ...project.vendors.flatMap((vendor) => [
+          vendor.name,
+          vendor.role,
+          vendor.nextAction?.label,
+          vendor.nextAction?.text,
+          ...vendor.lines.flatMap((line) => [line.label, line.amount]),
+        ]),
+      ].filter(Boolean).join(' ').toLowerCase()
+      return matchesStage && matchesAttention && (!term || searchable.includes(term))
+    })
+  }, [attentionOnly, projects, query, stage])
+
+  const filteredPending = useMemo(() => {
+    const term = query.trim().toLowerCase()
+    if (!term) return pending
+    return pending.filter((row) => Object.values(row).join(' ').toLowerCase().includes(term))
+  }, [pending, query])
+
+  const toggleProject = (name) => {
+    setCollapsedProjects((current) => (
+      current.includes(name)
+        ? current.filter((item) => item !== name)
+        : [...current, name]
+    ))
+  }
 
   return (
     <>
@@ -106,10 +148,45 @@ export default function App() {
       </div>
 
       <main>
-        <SectionHead name="By Project" />
-        {projects.map((p, i) => (
-          <Project project={p} key={i} />
-        ))}
+        <div className="project-toolbar">
+          <div>
+            <SectionHead name="By Project" />
+            <p className="filter-summary">{filteredProjects.length} of {projects.length} projects shown</p>
+          </div>
+          <div className="filters" aria-label="Dashboard filters">
+            <label className="search">
+              <span className="sr-only">Search projects and vendors</span>
+              <input
+                type="search"
+                placeholder="Search projects, vendors, items"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+              />
+            </label>
+            <select value={stage} onChange={(event) => setStage(event.target.value)} aria-label="Filter by project status">
+              <option value="all">All statuses</option>
+              <option value="ok">In production</option>
+              <option value="warn">Awaiting payment</option>
+              <option value="crit">Blocked</option>
+              <option value="info">Informational</option>
+            </select>
+            <button
+              className={`filter-button${attentionOnly ? ' active' : ''}`}
+              onClick={() => setAttentionOnly((current) => !current)}
+              aria-pressed={attentionOnly}
+            >
+              Needs attention
+            </button>
+          </div>
+        </div>
+        {filteredProjects.length > 0 ? filteredProjects.map((p) => (
+          <Project
+            project={p}
+            key={p.name}
+            collapsed={collapsedProjects.includes(p.name)}
+            onToggle={() => toggleProject(p.name)}
+          />
+        )) : <p className="empty-state">No projects match the current filters.</p>}
 
         <SectionHead name="Quoted — No PO Placed" />
         <div className="tablewrap">
@@ -123,7 +200,7 @@ export default function App() {
               </tr>
             </thead>
             <tbody>
-              {pending.map((row, i) => (
+              {filteredPending.map((row, i) => (
                 <tr key={i}>
                   <td>{row.item}</td>
                   <td>{row.vendor}</td>
@@ -131,6 +208,9 @@ export default function App() {
                   <td>{row.notes}</td>
                 </tr>
               ))}
+              {filteredPending.length === 0 && (
+                <tr><td colSpan="4" className="empty-cell">No pending quotes match the current search.</td></tr>
+              )}
             </tbody>
           </table>
         </div>

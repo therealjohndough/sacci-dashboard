@@ -92,11 +92,34 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px 24px 60px; }
 .section-head:first-child { margin-top: 0; }
 .section-head .name { font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
 .section-head .rule { flex: 1; height: 1px; background: var(--border); }
+.project-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+.project-toolbar .section-head { margin-bottom: 2px; }
+.filter-summary { margin: 0; color: var(--text-faint); font-size: 11px; }
+.filters { display: flex; flex-wrap: wrap; justify-content: end; gap: 8px; }
+.filters input, .filters select, .filter-button {
+  min-height: 34px; border: 1px solid var(--border); border-radius: 4px;
+  background: var(--bg-raised); color: var(--text-dim); font: inherit; font-size: 12px;
+}
+.filters input { width: 224px; padding: 7px 10px; }
+.filters select { padding: 7px 8px; }
+.filter-button { cursor: pointer; padding: 7px 10px; }
+.filter-button:hover, .filter-button.active { border-color: var(--green); color: var(--green); background: var(--green-tint); }
+.filters input:focus, .filters select:focus, .filter-button:focus-visible, .project-head:focus-visible {
+  outline: 2px solid var(--green); outline-offset: 2px;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+@media (max-width: 760px) {
+  .project-toolbar { align-items: stretch; flex-direction: column; }
+  .filters { justify-content: stretch; }
+  .filters input, .filters select, .filter-button { flex: 1 1 150px; width: auto; }
+}
 
 .project { background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 14px; overflow: hidden; }
-.project-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg-sunken); }
+.project-head { width: 100%; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border: 0; border-bottom: 1px solid var(--border); background: var(--bg-sunken); color: var(--text); cursor: pointer; text-align: left; }
+.project-head:hover { background: var(--green-tint); }
 .project-head .pname { font-size: 14.5px; font-weight: 700; }
 .project-head .pstage { margin-left: auto; }
+.project-toggle { color: var(--text-faint); font-size: 20px; font-weight: 300; line-height: 1; width: 16px; text-align: center; }
 
 .vendors { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .vendor { padding: 14px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -133,6 +156,8 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px 24px 60px; }
 .pending-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
 .pending-table tr:last-child td { border-bottom: none; }
 .tablewrap { overflow-x: auto; background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.empty-state { padding: 24px; color: var(--text-faint); border: 1px dashed var(--border); text-align: center; }
+.empty-cell { color: var(--text-faint); text-align: center; padding: 24px !important; }
 
 .provenance { font-size: 10.5px; color: var(--text-faint); }
 .provenance code { font-family: 'JetBrains Mono', monospace; font-size: 10px; }
